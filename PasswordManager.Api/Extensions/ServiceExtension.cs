@@ -1,8 +1,11 @@
-﻿namespace PasswordManager.Api.Extensions
+﻿using Microsoft.EntityFrameworkCore;
+using PasswordManager.Infrastructure.Data.Context;
+
+namespace PasswordManager.Api.Extensions
 {
     public static class ServiceExtension
     {
-        public static IServiceCollection ConfigureCors(this IServiceCollection service)
+        public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration config)
         {
             service.AddCors(option =>
             {
@@ -13,6 +16,8 @@
                     .AllowAnyHeader();
                 });
             });
+            service.AddDbContext<ApplicationDbContext>(option => option.
+                UseSqlServer(config.GetConnectionString("DefaultConnection")));
             return service;
         }
     }

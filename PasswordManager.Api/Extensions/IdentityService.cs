@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PasswordManager.Core.Domain.Entities;
 using PasswordManager.Infrastructure.Data.IdentityContext;
@@ -26,6 +27,8 @@ namespace PasswordManager.Api.Extensions
                         ValidateIssuer = true
                     };
                 });
+            service.AddDbContext<UserDbContext>(option => option.
+                UseSqlServer(config.GetConnectionString("IdentityConnection")));
             return service;
         }
     }
