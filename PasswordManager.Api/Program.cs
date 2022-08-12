@@ -1,6 +1,7 @@
 using PasswordManager.Api.Extensions;
 using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Infrastructure.Data.Repositories;
+using PasswordManager.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddIdentityService(builder.Configuration);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPasswordDetailsRepository, PasswordDetailsRepository>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
