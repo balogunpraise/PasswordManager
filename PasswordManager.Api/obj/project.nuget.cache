@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Pt+YMjAlOypv6YyGxv9luCUjS9n7drOEHFLCbxDIMF5O912t9+Fyq/TsA/BVbvE8Wb6dkCqDfFbfK4DBotei3A==",
+  "dgSpecHash": "rZ7AahV4ENeapdlazd1ymdZCw/9XsawWp0enHJvpmrLRi5BCxqNOh5GFwwvdV6ns0+GuXHQ6aMatLfe1/s9YTA==",
   "success": true,
   "projectFilePath": "C:\\Users\\pbalogun\\Desktop\\PasswordManagerProject\\PasswordManager\\PasswordManager.Api\\PasswordManager.Api.csproj",
   "expectedPackageFiles": [
@@ -23,6 +23,8 @@
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\3.1.8\\microsoft.extensions.fileproviders.abstractions.3.1.8.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\3.1.8\\microsoft.extensions.hosting.abstractions.3.1.8.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.identity.core\\6.0.8\\microsoft.extensions.identity.core.6.0.8.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.identity.stores\\6.0.8\\microsoft.extensions.identity.stores.6.0.8.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.extensions.logging\\6.0.0\\microsoft.extensions.logging.6.0.0.nupkg.sha512",
@@ -40,6 +42,10 @@
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\serilog\\2.11.0\\serilog.2.11.0.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\serilog.extensions.hosting\\5.0.1\\serilog.extensions.hosting.5.0.1.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\serilog.extensions.logging\\3.1.0\\serilog.extensions.logging.3.1.0.nupkg.sha512",
+    "C:\\Users\\pbalogun\\.nuget\\packages\\serilog.sinks.console\\4.0.1\\serilog.sinks.console.4.0.1.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\pbalogun\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",

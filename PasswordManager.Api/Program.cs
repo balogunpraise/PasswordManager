@@ -2,9 +2,16 @@ using PasswordManager.Api.Extensions;
 using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Infrastructure.Data.Repositories;
 using PasswordManager.Infrastructure.Services;
+using Serilog;
+
+
+var logger = new LoggerConfiguration()
+    .WriteTo.Console(outputTemplate:
+        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog();
 // Add services to the container.
 
 builder.Services.AddControllers();

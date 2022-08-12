@@ -35,6 +35,7 @@ namespace PasswordManager.Api.Controllers
             });
         }
 
+        [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto userIn)
         {
             var user = new AppUser
