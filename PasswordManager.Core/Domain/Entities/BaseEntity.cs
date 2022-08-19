@@ -8,13 +8,9 @@ namespace PasswordManager.Core.Domain.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedAd { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public BaseEntity()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }

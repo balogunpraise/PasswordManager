@@ -5,11 +5,10 @@ namespace PasswordManager.Infrastructure.Data.Context
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions option) : base(option)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> option) : base(option)
         {
 
         }
-
         public DbSet<LoginCredential> LoginCredentials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
