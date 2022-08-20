@@ -13,19 +13,24 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public Task AddNewCredentials(LoginCredential loginCredential)
+        public async Task AddNewCredentials(LoginCredential loginCredential)
         {
-            throw new NotImplementedException();
+            await _context.LoginCredentials.AddAsync(loginCredential);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<LoginCredential> GetCredential(string credId)
+        public async Task<LoginCredential> GetCredential(int credId)
         {
-            throw new NotImplementedException();
+            LoginCredential? loginCredential = await _context.LoginCredentials.FindAsync(credId);
+            return loginCredential;
         }
 
-        public Task RemoveCredentials(string credId)
+        public async Task RemoveCredentials(int credId)
         {
-            throw new NotImplementedException();
+            var credential = await _context.LoginCredentials.FindAsync(credId);
+            if (credential != null)
+                _context.Remove(credential);
+            await _context.SaveChangesAsync();
         }
 
         public Task UpdateCredentials(string credId, LoginCredential loginCredential)

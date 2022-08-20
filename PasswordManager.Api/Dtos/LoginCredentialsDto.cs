@@ -2,11 +2,11 @@
 {
     public class LoginCredentialsDto
     {
-        public string WebsiteName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string WebAddress { get; set; }
-        public string Note { get; set; }
-        public string ImageUrl { get; set; }
+        public string WebsiteName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string WebAddress { get; set; } = string.Empty;
+        public string Note { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

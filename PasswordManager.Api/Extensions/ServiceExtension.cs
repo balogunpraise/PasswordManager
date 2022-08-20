@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PasswordManager.Api.Helpers;
 using PasswordManager.Infrastructure.Data.Context;
 
 namespace PasswordManager.Api.Extensions
@@ -18,6 +19,7 @@ namespace PasswordManager.Api.Extensions
             });
             service.AddDbContext<ApplicationDbContext>(option => option.
                 UseSqlServer(config.GetConnectionString("DefaultConnection")));
+            service.AddAutoMapper(typeof(MappingProfiles).Assembly);
             return service;
         }
     }
