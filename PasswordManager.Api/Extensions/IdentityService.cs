@@ -24,11 +24,13 @@ namespace PasswordManager.Api.Extensions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
                         ValidIssuer = config["Token:Issuer"],
-                        ValidateIssuer = true
+                        ValidateIssuer = true,
+                        ValidateAudience = false
                     };
                 });
+            var connectionString = config.GetConnectionString("IdentityConnection");
             service.AddDbContext<UserDbContext>(option => option.
-                UseSqlServer(config.GetConnectionString("IdentityConnection")));
+                UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             return service;
         }
     }

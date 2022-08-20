@@ -53,7 +53,7 @@ namespace PasswordManager.Api.Controllers
                 DisplayName = user.FirstName + user.LastName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
-            }));
+            }, "Succeede"));
         }
 
         [HttpPost("register")]

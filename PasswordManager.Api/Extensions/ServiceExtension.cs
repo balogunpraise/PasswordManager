@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PasswordManager.Api.Helpers;
+using PasswordManager.Api.Services;
 using PasswordManager.Infrastructure.Data.Context;
 
 namespace PasswordManager.Api.Extensions
@@ -17,9 +18,11 @@ namespace PasswordManager.Api.Extensions
                     .AllowAnyHeader();
                 });
             });
+            service.AddScoped<EncryptionService>();
+            var connectionString = config.GetConnectionString("DefaultConnection");
             service.AddDbContext<ApplicationDbContext>(option => option.
-                UseSqlServer(config.GetConnectionString("DefaultConnection")));
-            service.AddAutoMapper(typeof(MappingProfiles).Assembly);
+                UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            service.AddAutoMapper(typeof(MappingProfiles));
             return service;
         }
     }

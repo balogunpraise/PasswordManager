@@ -51,11 +51,18 @@ namespace PasswordManager.Api.Services
         {
             using (Aes myAes = Aes.Create())
             {
-                myAes.Key = GetEncryptionKeyById(userId);
-                myAes.Mode = CipherMode.CBC;
-                myAes.Padding = PaddingMode.PKCS7;
+                try
+                {
+                    myAes.Key = GetEncryptionKeyById(userId);
+                    myAes.Mode = CipherMode.CBC;
+                    myAes.Padding = PaddingMode.PKCS7;
 
-                return AesHelper.EncryptAES(data, myAes.Key);
+                    return AesHelper.EncryptAES(data, myAes.Key);
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             }
         }
 

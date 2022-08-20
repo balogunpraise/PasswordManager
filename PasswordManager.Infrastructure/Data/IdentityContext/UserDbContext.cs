@@ -11,7 +11,7 @@ namespace PasswordManager.Infrastructure.Data.IdentityContext
 {
     public class UserDbContext : IdentityDbContext<AppUser>
     {
-        public UserDbContext(DbContextOptions option): base()
+        public UserDbContext(DbContextOptions<UserDbContext> option): base(option)
         {
 
         }

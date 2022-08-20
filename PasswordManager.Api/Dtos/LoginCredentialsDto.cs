@@ -7,6 +7,7 @@
         public string Password { get; set; } = string.Empty;
         public string WebAddress { get; set; } = string.Empty;
         public string Note { get; set; } = string.Empty;
+        public int UserId { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
     }
 }

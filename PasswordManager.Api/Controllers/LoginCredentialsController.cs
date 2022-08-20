@@ -57,8 +57,9 @@ namespace PasswordManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddLoginData(LoginCredentialsDto credDto)
         {
+            credDto.Password = _encryptionService.Encrypt(AuthUserId, credDto.Password);
+            credDto.UserId = Int32.Parse(AuthUserId);
             var loginData = _mapper.Map<LoginCredentialsDto, LoginCredential>(credDto);
-            loginData.UserId = Int32.Parse(AuthUserId);
             await _repo.AddNewCredentials(loginData);
             return CreatedAtAction(nameof(GetCredential), new { id = loginData.Id });
         }
