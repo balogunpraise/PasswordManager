@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Api.Dtos;
 using PasswordManager.Api.Wrapper;
 using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Core.Domain.Entities;
+using System.Security.Claims;
 
 namespace PasswordManager.Api.Controllers
 {
@@ -12,13 +15,30 @@ namespace PasswordManager.Api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signinManager;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signinManager,
-            ITokenService tokenService)
+            ITokenService tokenService, IMapper mapper)
         {
             _userManager = userManager;
             _signinManager = signinManager;
             _tokenService = tokenService;
+            _mapper = mapper;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var email = HttpContext.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByNameAsync(email);
+            return (_mapper.Map<UserDto>(user));
+        }
+
+        [HttpGet("email-exists")]
+        public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
 
         [HttpPost("login")]
@@ -39,13 +59,7 @@ namespace PasswordManager.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto userIn)
         {
-            var user = new AppUser
-            {
-                FirstName = userIn.FirstName,
-                LastName = userIn.LastName,
-                Email = userIn.Email,
-            };
-
+            var user = _mapper.Map<RegisterDto, AppUser>(userIn);
             var duplicateUser = await _userManager.FindByEmailAsync(user.Email);
             if (duplicateUser != null) return BadRequest(new ApiResponse(400));
             var result = await _userManager.CreateAsync(user, userIn.Password);
@@ -58,7 +72,7 @@ namespace PasswordManager.Api.Controllers
                     Token = "token"
                 });
             }
-            return BadRequest();
+            return BadRequest(new ApiResponse(400));
         }
     }
 }
