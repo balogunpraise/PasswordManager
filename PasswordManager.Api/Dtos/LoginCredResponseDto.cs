@@ -1,6 +1,6 @@
 ﻿namespace PasswordManager.Api.Dtos
 {
-    public class LoginCredResponseDto
+    public class LoginCredentialDto
     {
         public string WebsiteName { get; set; }
         public string Email { get; set; }

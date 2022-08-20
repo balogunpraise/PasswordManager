@@ -1,4 +1,5 @@
-﻿using PasswordManager.Core.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Core.Domain.Entities;
 using PasswordManager.Infrastructure.Data.Context;
 
@@ -25,6 +26,10 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             return loginCredential;
         }
 
+        public async Task<IReadOnlyList<LoginCredential>> GetCredentials()
+        {
+            return await _context.LoginCredentials.ToListAsync();
+        }
         public async Task RemoveCredentials(int credId)
         {
             var credential = await _context.LoginCredentials.FindAsync(credId);
