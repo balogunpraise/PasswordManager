@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Api.Dtos;
 using PasswordManager.Api.Services;
+using PasswordManager.Api.Wrapper;
 using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Core.Domain.Entities;
 using System.Net.Mime;
@@ -15,7 +16,7 @@ namespace PasswordManager.Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<LoginCredentialsController> _logger;
         private readonly IMapper _mapper;
-        public LoginCredentialsController(ILogger<LoginCredentialsController> logger, 
+        public LoginCredentialsController(ILogger<LoginCredentialsController> logger,
             EncryptionService encryptionService, IPasswordDetailsRepository repo,
             IConfiguration config, IMapper mapper)
         {
@@ -23,32 +24,31 @@ namespace PasswordManager.Api.Controllers
             _repo = repo;
             _encryptionService = encryptionService;
             _configuration = config;
-            _mapper = mapper;  
+            _mapper = mapper;
         }
 
         public string AuthUserId { get { return HttpContext.User.Identity.Name; } }
 
         [HttpGet("getcredential/{id}")]
-        [ProducesResponseType(typeof(LoginCredentialsDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<LoginCredentialDto>> GetCredential([FromQuery]string id)
+        public async Task<ActionResult> GetCredential([FromQuery] string id)
         {
             var cred = await _repo.GetCredential(Int32.Parse(id));
-            if(cred != null)
+            if (cred != null)
             {
-                var response = _mapper.Map<LoginCredential, LoginCredentialsDto>(cred);
+                var response = _mapper.Map<LoginCredential, LoginCredentialDto>(cred);
                 response.Password = _encryptionService.Decrypt(AuthUserId, cred.Password);
-                return Ok(response);
+                return Ok(new ApiResponse<LoginCredentialDto>(200, response, "Succeeded"));
             }
-            return BadRequest();
+            return BadRequest(new ApiResponse(400));
         }
 
+        [HttpGet("credentials")]
         public async Task<ActionResult<IReadOnlyList<LoginCredentialsDto>>> GetAllCredentials()
         {
             var creds = await _repo.GetCredentials();
             var response = _mapper.Map<IReadOnlyList<LoginCredential>, IReadOnlyList<LoginCredentialDto>>(creds);
             response.Select(x => _encryptionService.Decrypt(AuthUserId, x.Password));
-            return Ok(response);
+            return Ok(new ApiResponse<IReadOnlyList<LoginCredentialDto>>(200, response, "Succeeded"));
         }
 
         [HttpPost("addcredential")]
@@ -66,10 +66,34 @@ namespace PasswordManager.Api.Controllers
         [HttpDelete("deletcredential/{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteCredential([FromQuery]string Id)
+        public async Task<IActionResult> DeleteCredential([FromQuery] string Id)
         {
-            await _repo.RemoveCredentials(Int32.Parse(Id));
-            return Ok(Id);
+            try
+            {
+                await _repo.RemoveCredentials(Int32.Parse(Id));
+                return NoContent();
+            }
+            catch
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+        }
+
+        [HttpPut("update/{Id}")]
+        public async Task<IActionResult> UpdateCredential(LoginCredentialDto input, string Id)
+        {
+            try
+            {
+                input.Password = _encryptionService.Encrypt(AuthUserId, input.Password);
+                var mappedInput = _mapper.Map<LoginCredentialDto, LoginCredential>(input);
+                await _repo.UpdateCredentials(int.Parse(Id), mappedInput);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+     
         }
     }
 }

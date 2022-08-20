@@ -38,9 +38,18 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task UpdateCredentials(string credId, LoginCredential loginCredential)
+        public async Task UpdateCredentials(int id, LoginCredential loginCredential)
         {
-            throw new NotImplementedException();
+            var res = await _context.LoginCredentials.FindAsync(id);
+            if (res != null)
+            {
+                res.WebsiteName = loginCredential.WebsiteName;
+                res.Password =  loginCredential.Password;
+                res.Email = loginCredential.Email;
+                res.Note = loginCredential.Note;
+                res.WebAddress = loginCredential.WebAddress;
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

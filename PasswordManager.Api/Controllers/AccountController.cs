@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Api.Dtos;
+using PasswordManager.Api.Wrapper;
 using PasswordManager.Core.Application.Interfaces;
 using PasswordManager.Core.Domain.Entities;
 
@@ -27,12 +28,12 @@ namespace PasswordManager.Api.Controllers
             if (user == null) return Unauthorized();
             var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized();
-            return Ok(new UserDto
+            return Ok(new ApiResponse<UserDto>(200, new UserDto
             {
                 DisplayName = user.FirstName + user.LastName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
-            });
+            }));
         }
 
         [HttpPost("register")]
@@ -46,7 +47,7 @@ namespace PasswordManager.Api.Controllers
             };
 
             var duplicateUser = await _userManager.FindByEmailAsync(user.Email);
-            if (duplicateUser != null) return BadRequest();
+            if (duplicateUser != null) return BadRequest(new ApiResponse(400));
             var result = await _userManager.CreateAsync(user, userIn.Password);
             if (result.Succeeded)
             {
