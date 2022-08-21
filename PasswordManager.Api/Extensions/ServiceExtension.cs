@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PasswordManager.Api.Helpers;
+using PasswordManager.Api.Security;
 using PasswordManager.Api.Services;
 using PasswordManager.Infrastructure.Data.Context;
 
@@ -24,6 +25,7 @@ namespace PasswordManager.Api.Extensions
             service.AddDbContext<ApplicationDbContext>(option => option.
                 UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             service.AddAutoMapper(typeof(MappingProfiles));
+            service.AddSingleton<DataProtectorString>();
 
             service.AddSwaggerGen(option =>
             {

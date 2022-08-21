@@ -7,7 +7,7 @@ namespace PasswordManager.Core.Application.Interfaces
         Task AddNewCredentials(LoginCredential loginCredential);
         Task UpdateCredentials(int id, LoginCredential loginCredential);
         Task RemoveCredentials(int credId);
-        Task<LoginCredential> GetCredential(int credId);
-        Task<IReadOnlyList<LoginCredential>> GetCredentials();
+        Task<LoginCredential> GetCredential(string id, int credId);
+        Task<IReadOnlyList<LoginCredential>> GetCredentials(string id);
     }
 }

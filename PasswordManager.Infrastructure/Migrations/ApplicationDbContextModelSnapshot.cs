@@ -99,10 +99,6 @@ namespace PasswordManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -114,8 +110,8 @@ namespace PasswordManager.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("WebAddress")
                         .IsRequired()

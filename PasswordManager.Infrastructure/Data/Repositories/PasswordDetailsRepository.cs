@@ -20,15 +20,16 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<LoginCredential> GetCredential(int credId)
+        public async Task<LoginCredential> GetCredential(string id, int credId)
         {
-            LoginCredential? loginCredential = await _context.LoginCredentials.FindAsync(credId);
+            LoginCredential? loginCredential = await _context.LoginCredentials
+                .Where(x => x.UserId == id && x.Id == credId).SingleOrDefaultAsync();
             return loginCredential;
         }
 
-        public async Task<IReadOnlyList<LoginCredential>> GetCredentials()
+        public async Task<IReadOnlyList<LoginCredential>> GetCredentials(string id)
         {
-            return await _context.LoginCredentials.ToListAsync();
+            return await _context.LoginCredentials.Where(x => x.UserId == id).ToListAsync();
         }
         public async Task RemoveCredentials(int credId)
         {
