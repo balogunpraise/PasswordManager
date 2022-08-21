@@ -8,8 +8,9 @@ namespace PasswordManager.Api.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<LoginCredential, LoginCredentialsDto>();
+            CreateMap<LoginCredentialDto, LoginCredential>();
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<AppUser, UserDto>();
         }
     }
 }

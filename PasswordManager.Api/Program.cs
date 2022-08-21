@@ -12,11 +12,9 @@ var logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddIdentityService(builder.Configuration); 
-builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPasswordDetailsRepository, PasswordDetailsRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddServices(builder.Configuration);
@@ -30,7 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

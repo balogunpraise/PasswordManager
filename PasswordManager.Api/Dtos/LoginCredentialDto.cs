@@ -7,9 +7,8 @@
         public string Password { get; set; }
         public string WebAddress { get; set; }
         public string Note { get; set; }
-        public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public int? UserId { get; set; }
+        //public int? UserId { get; set; }
        // public AppUser AppUser { get; set; }
     }
 }

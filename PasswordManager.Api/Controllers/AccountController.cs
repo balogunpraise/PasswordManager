@@ -31,8 +31,8 @@ namespace PasswordManager.Api.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var email = HttpContext.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-            var user = await _userManager.FindByNameAsync(email);
-            return (_mapper.Map<UserDto>(user));
+            var user = await _userManager.FindByEmailAsync(email);
+            return Ok( new ApiResponse<UserDto>(200, _mapper.Map<AppUser, UserDto>(user), "Succeeded"));
         }
 
         [HttpGet("email-exists")]
@@ -53,7 +53,7 @@ namespace PasswordManager.Api.Controllers
                 DisplayName = user.FirstName + user.LastName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
-            }, "Succeede"));
+            }, "Succeeded"));
         }
 
         [HttpPost("register")]
@@ -73,6 +73,13 @@ namespace PasswordManager.Api.Controllers
                 });
             }
             return BadRequest(new ApiResponse(400));
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signinManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
         }
     }
 }
