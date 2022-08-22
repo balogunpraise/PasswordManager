@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PasswordManager.Core.Application;
 using PasswordManager.Core.Application.Interfaces;
+using PasswordManager.Core.Application.QueryParameters;
 using PasswordManager.Core.Domain.Entities;
 using PasswordManager.Infrastructure.Data.Context;
 
@@ -27,9 +29,12 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             return loginCredential;
         }
 
-        public async Task<IReadOnlyList<LoginCredential>> GetCredentials(string id)
+        public PagedList<LoginCredential>GetCredentials(string id, QueryStringParameters queryStringParameters)
         {
-            return await _context.LoginCredentials.Where(x => x.UserId == id).ToListAsync();
+            return PagedList<LoginCredential>.ToPagedList(_context.LoginCredentials.Where(x => x.UserId == id)
+                .OrderBy(x => x.WebsiteName)
+                .Skip((queryStringParameters.PageNumber - 1) * queryStringParameters.PageSize)
+                .Take(queryStringParameters.PageSize),queryStringParameters.PageNumber, queryStringParameters.PageSize);
         }
         public async Task RemoveCredentials(int credId)
         {

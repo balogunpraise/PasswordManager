@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Api.Dtos;
 using PasswordManager.Api.Security;
-using PasswordManager.Api.Services;
 using PasswordManager.Api.Wrapper;
 using PasswordManager.Core.Application.Interfaces;
+using PasswordManager.Core.Application.QueryParameters;
 using PasswordManager.Core.Domain.Entities;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -17,22 +17,17 @@ namespace PasswordManager.Api.Controllers
     public class LoginCredentialsController : BaseApiController
     {
         private readonly IPasswordDetailsRepository _repo;
-        private readonly EncryptionService _encryptionService;
-        private readonly IConfiguration _configuration;
         private readonly ILogger<LoginCredentialsController> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IDataProtector _dataProtector;
 
         public LoginCredentialsController(ILogger<LoginCredentialsController> logger,
-            EncryptionService encryptionService, IPasswordDetailsRepository repo,
-            IConfiguration config, IMapper mapper, UserManager<AppUser> userManager,
+            IPasswordDetailsRepository repo, IMapper mapper, UserManager<AppUser> userManager,
             IDataProtectionProvider dataProtectionProvider, DataProtectorString dataProtectorString)
         {
             _logger = logger;
             _repo = repo;
-            _encryptionService = encryptionService;
-            _configuration = config;
             _mapper = mapper;
             _userManager = userManager;
             _dataProtector = dataProtectionProvider.CreateProtector(dataProtectorString.PasswordProtectionString);
@@ -56,12 +51,13 @@ namespace PasswordManager.Api.Controllers
 
         [HttpGet("credentials")]
         [Authorize]
-        public async Task<ActionResult<IReadOnlyList<LoginCredentialDto>>> GetAllCredentials()
+        public ActionResult<IReadOnlyList<LoginCredentialDto>> GetAllCredentials([FromQuery]QueryStringParameters query)
         {
             string AuthUserId = GetLoggedInUserId();
-            var creds = await _repo.GetCredentials(AuthUserId);
+            var creds = _repo.GetCredentials(AuthUserId, query);
             var response = _mapper.Map<IReadOnlyList<LoginCredential>, IReadOnlyList<LoginCredentialDto>>(creds);
-            response.Select(x => _dataProtector.Unprotect(x.Password));
+            foreach (var cred in response)
+                cred.Password = _dataProtector.Unprotect(cred.Password);
             return Ok(new ApiResponse<IReadOnlyList<LoginCredentialDto>>(200, response, "Succeeded"));
         }
 

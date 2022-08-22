@@ -5,10 +5,14 @@ using PasswordManager.Infrastructure.Services;
 using Serilog;
 
 
-var logger = new LoggerConfiguration()
-    .WriteTo.Console(outputTemplate:
-        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File
+        (
+            path: "C:\\logs\\log-.txt",
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+            rollingInterval: RollingInterval.Day,
+            restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
+        ).CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
@@ -28,9 +32,24 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseCors("AllowOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+try
+{
+    Log.Information("Application Starting");
+    app.Run();
+}
+catch(Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

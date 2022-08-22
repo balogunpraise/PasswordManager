@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PasswordManager.Api.Handlers;
 using PasswordManager.Api.Helpers;
 using PasswordManager.Api.Security;
 using PasswordManager.Api.Services;
@@ -15,7 +16,7 @@ namespace PasswordManager.Api.Extensions
             {
                 option.AddPolicy("AllowOrigins", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
+                    builder.WithOrigins("http://localhost:8080")
                     .AllowAnyMethod()
                     .AllowAnyHeader();
                 });
@@ -26,6 +27,8 @@ namespace PasswordManager.Api.Extensions
                 UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             service.AddAutoMapper(typeof(MappingProfiles));
             service.AddSingleton<DataProtectorString>();
+            service.Configure<EmailSettings>(config.GetSection("MailSettings"));
+            service.AddTransient<IEmailService, EmailService>();
 
             service.AddSwaggerGen(option =>
             {

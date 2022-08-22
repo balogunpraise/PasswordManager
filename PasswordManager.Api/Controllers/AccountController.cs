@@ -62,12 +62,12 @@ namespace PasswordManager.Api.Controllers
             var user = _mapper.Map<RegisterDto, AppUser>(userIn);
             var duplicateUser = await _userManager.FindByEmailAsync(user.Email);
             if (duplicateUser != null) return BadRequest(new ApiResponse(400));
-            var result = await _userManager.CreateAsync(user, userIn.Password);
+            var result = await _userManager.CreateAsync(user, userIn.PasswordHash);
             if (result.Succeeded)
             {
                 return Ok(new UserDto
                 {
-                    DisplayName = user.FirstName + user.LastName,
+                    DisplayName = user.FirstName +" "+ user.LastName,
                     Email = userIn.Email,
                     Token = "token"
                 });
