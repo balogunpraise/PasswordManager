@@ -29,12 +29,14 @@ namespace PasswordManager.Infrastructure.Data.Repositories
             return loginCredential;
         }
 
-        public PagedList<LoginCredential>GetCredentials(string id, QueryStringParameters queryStringParameters)
+        public async Task<PagedList<LoginCredential>>GetCredentials(string id, QueryStringParameters queryStringParameters)
         {
-            return PagedList<LoginCredential>.ToPagedList(_context.LoginCredentials.Where(x => x.UserId == id)
+            var data = await _context.LoginCredentials.Where(x => x.UserId == id)
                 .OrderBy(x => x.WebsiteName)
                 .Skip((queryStringParameters.PageNumber - 1) * queryStringParameters.PageSize)
-                .Take(queryStringParameters.PageSize),queryStringParameters.PageNumber, queryStringParameters.PageSize);
+                .Take(queryStringParameters.PageSize).ToListAsync();
+            var pagedData = PagedList<LoginCredential>.ToPagedList(data, queryStringParameters.PageNumber, queryStringParameters.PageSize);
+            return pagedData;
         }
         public async Task RemoveCredentials(int credId)
         {

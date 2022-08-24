@@ -26,8 +26,8 @@ namespace PasswordManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
-        [HttpGet]
+        //[Authorize]
+        [HttpGet("user")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var email = HttpContext.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
@@ -50,6 +50,7 @@ namespace PasswordManager.Api.Controllers
             if (!result.Succeeded) return Unauthorized();
             return Ok(new ApiResponse<UserDto>(200, new UserDto
             {
+                Id = user.Id,
                 DisplayName = user.FirstName + user.LastName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
@@ -67,6 +68,7 @@ namespace PasswordManager.Api.Controllers
             {
                 return Ok(new UserDto
                 {
+                    Id = user.Id,
                     DisplayName = user.FirstName +" "+ user.LastName,
                     Email = userIn.Email,
                     Token = "token"

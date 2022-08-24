@@ -51,10 +51,10 @@ namespace PasswordManager.Api.Controllers
 
         [HttpGet("credentials")]
         [Authorize]
-        public ActionResult<IReadOnlyList<LoginCredentialDto>> GetAllCredentials([FromQuery]QueryStringParameters query)
+        public async Task<ActionResult<IReadOnlyList<LoginCredentialDto>>> GetAllCredentials([FromQuery]QueryStringParameters query)
         {
             string AuthUserId = GetLoggedInUserId();
-            var creds = _repo.GetCredentials(AuthUserId, query);
+            var creds = await _repo.GetCredentials(AuthUserId, query);
             var response = _mapper.Map<IReadOnlyList<LoginCredential>, IReadOnlyList<LoginCredentialDto>>(creds);
             foreach (var cred in response)
                 cred.Password = _dataProtector.Unprotect(cred.Password);
